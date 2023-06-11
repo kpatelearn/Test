@@ -12,7 +12,9 @@
     <button id="createAccount">Create Account</button>
     <button id="signIn">Sign In</button>
     <button id="signOut" style="display: none;">Sign Out</button>
-    <p id="message" style="display: none;">You are signed in</p>
+    <div id="message" style="display: none;">You are signed in with the email:
+    <p id="uEmail"></p>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
@@ -39,6 +41,7 @@ const createAccountButton = document.getElementById('createAccount');
 const signInButton = document.getElementById('signIn');
 const signOutButton = document.getElementById('signOut');
 const message = document.getElementById('message');
+const uEmail = document.getElementById('uEmail');
 
 
 const userSignIn = async() => {
@@ -74,6 +77,7 @@ onAuthStateChanged(auth, (user) => {
     createAccountButton.style.display = 'none';
     signOutButton.style.display = 'block';
     message.style.display = 'block';
+    uEmail.innerHTML = user.email;
   } else {
     // User is signed out
     signInButton.style.display = 'block';
