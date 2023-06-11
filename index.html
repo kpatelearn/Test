@@ -9,12 +9,14 @@
     <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
 </head>
 <body>
-    <button id="login">Login with Google</button>
-    <div id="userInfo"></div>
+    <button id="createAccount">Create Account</button>
+    <button id="signIn">Sign In</button>
+    <button id="signOut" style="display: none;">Sign Out</button>
+    <p id="message" style="display: none;">You are signed in</p>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBR8AogrrG5bguzS4wnSnwFTdOFoO7t4SA",
@@ -33,9 +35,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
+const createAccountButton = document.getElementById('createAccount');
+const signInButton = document.getElementById('signIn');
+const signOutButton = document.getElementById('signOut');
+const message = document.getElementById('message');
 
 
-signInWithPopup(auth, provider)
+const userSignIn = async() => {
+  signInWithPopup(auth, provider)
   .then((result) => {
     // The signed-in user info.
     const user = result.user;
@@ -50,19 +57,37 @@ signInWithPopup(auth, provider)
     const credential = error.credential;
     // ...
   });
+}
+
+const userSignOut = async => {
+  signOut(auth).then(() => {
+  // Sign-out successful.
+}).catch((error) => {
+  // An error happened.
+});
+}
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    const userInfo = document.querySelector("#userInfo");
-    userInfo.innerHTML = "You are signed in!"
-  
-    const uid = user.uid;
-    // ...
+    // User is signed in
+    signInButton.style.display = 'none';
+    createAccountButton.style.display = 'none';
+    signOutButton.style.display = 'block';
+    message.style.display = 'block';
   } else {
     // User is signed out
-    // ...
+    signInButton.style.display = 'block';
+    createAccountButton.style.display = 'block';
+    signOutButton.style.display = 'none';
+    message.style.display = 'none';
   }
 });
+
+
+
+createAccountButton.addEventListener('click', userSignIn);
+signInButton.addEventListener('click', userSignIn);
+signOutButton.addEventListener('click', userSignOut);
 
 
     </script>
