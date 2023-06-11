@@ -1,12 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>My App</title>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
 </head>
 <body>
-    
+    <button id="login">Login with Google</button>
+    <div id="userInfo"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBR8AogrrG5bguzS4wnSnwFTdOFoO7t4SA",
+  authDomain: "authtest-9f79f.firebaseapp.com",
+  projectId: "authtest-9f79f",
+  storageBucket: "authtest-9f79f.appspot.com",
+  messagingSenderId: "687250554995",
+  appId: "1:687250554995:web:a6dbfb8c0f5d15f5ca2a06"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+
+
+const auth = getAuth();
+const provider = new GoogleAuthProvider();
+
+
+
+signInWithPopup(auth, provider)
+  .then((result) => {
+    // The signed-in user info.
+    const user = result.user;
+    // Show an alert
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.email;
+    // The AuthCredential type that was used.
+    const credential = error.credential;
+    // ...
+  });
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const userInfo = document.querySelector("#userInfo");
+    userInfo.innerHTML = "You are signed in!"
+  
+    const uid = user.uid;
+    // ...
+  } else {
+    // User is signed out
+    // ...
+  }
+});
+
+
+    </script>
 </body>
 </html>
